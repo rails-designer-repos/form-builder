@@ -1,1 +1,266 @@
+<% content_for :title, "Workspace settings" %>
 
+<div class="w-full max-w-3xl pb-16">
+  <header class="mb-8">
+    <h1 class="text-2xl font-semibold text-gray-900">Workspace settings</h1>
+  </header>
+
+  <%= form_with model: @workspace, url: "#", class: "space-y-10" do |form| %>
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Profile</h2>
+
+      <%= form.input :name %>
+      <%= form.input :slug %>
+      <%= form.input :website, label_suffix: "Optional" %>
+      <%= form.input :description, as: :text, field_css: "mt-4 w-full rounded-lg bg-gray-50 p-4" %>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :logo %>
+
+        <%= form.file_field :logo %>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Contact and direct fields</h2>
+
+      <div data-slot="field" class="w-full">
+        <%= form.label :support_email %>
+
+        <%= form.email_field :support_email %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :phone %>
+
+        <%= form.telephone_field :phone %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :backup_phone, "Backup phone (phone_field alias)" %>
+
+        <%= form.phone_field :backup_phone %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :member_search %>
+
+        <%= form.search_field :member_search, placeholder: "Search teammates" %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :api_secret %>
+
+        <%= form.password_field :api_secret %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :docs_url %>
+
+        <%= form.url_field :docs_url %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :monthly_budget %>
+
+        <%= form.number_field :monthly_budget, step: "0.01" %>
+      </div>
+
+      <%= form.input :invite_email, label: false, placeholder: "firstname@company.com" %>
+      <%= form.input :callback_url, label_suffix: "Optional", hint: "We send workspace events here." %>
+      <%= form.input :smtp_password %>
+      <%= form.input :legal_name, additional_class: "bg-gray-50" %>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Plan and preferences</h2>
+
+      <%= form.radio_button :plan, "free", label: "Free" %>
+      <%= form.radio_button :plan, "pro", label: "Pro" %>
+      <%= form.radio_button :plan, "enterprise" do %>Enterprise<% end %>
+
+      <div data-slot="field" class="mt-4 flex items-start gap-x-2">
+        <%= form.radio_button :plan, "legacy", plain: true %>
+        <label for="workspace_plan_legacy" class="text-sm font-normal text-gray-800">Legacy (plain radio)</label>
+      </div>
+
+      <div class="mt-4">
+        <%= form.collection_radio_buttons :visibility,
+          [["Private", "private"], ["Internal", "internal"], ["Public", "public"]],
+          :last, :first %>
+      </div>
+
+      <div class="mt-4">
+        <%= form.collection_check_boxes :features,
+          [["Projects", "projects"], ["Analytics", "analytics"], ["API", "api"]],
+          :last, :first %>
+      </div>
+
+      <div class="mt-4">
+        <%= form.collection_checkboxes :integrations,
+          [["Slack", "slack"], ["GitHub", "github"], ["Linear", "linear"]],
+          :last, :first %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :channels %>
+
+        <%= form.select :channels,
+          options_for_select([["Email", "email"], ["In-app", "in_app"], ["SMS", "sms"]], @workspace.channels),
+          {}, multiple: true %>
+      </div>
+
+      <%= form.input :billing_cycle, collection: [["Monthly", "monthly"], ["Annual", "annual"]] %>
+
+      <%= form.check_box :product_updates, label: "Product updates" %>
+      <%= form.checkbox :usage_analytics, label: "Usage analytics (checkbox alias)" %>
+      <%= form.check_box :terms do %>I accept the terms<% end %>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Regional settings</h2>
+
+      <div data-slot="field" class="w-full">
+        <%= form.label :timezone %>
+
+        <%= form.select :timezone,
+          options_for_select([["Berlin", "berlin"], ["London", "london"], ["Lisbon", "lisbon"]], @workspace.timezone) %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :owner_id, "Workspace owner" %>
+
+        <%= form.collection_select :owner_id,
+          [["Alex", "alex"], ["Sam", "sam"], ["Jordan", "jordan"]],
+          :last, :first %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :industry %>
+
+        <%= form.grouped_collection_select :industry,
+          [["Technology", [["SaaS", "saas"], ["Fintech", "fintech"]]],
+           ["Services", [["Design", "design"], ["Consulting", "consulting"]]]],
+          :last, :first, :last, :first %>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Schedule</h2>
+
+      <div data-slot="field" class="w-full">
+        <%= form.label :trial_ends_on %>
+
+        <%= form.date_field :trial_ends_on %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :daily_digest_at %>
+
+        <%= form.time_field :daily_digest_at %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :maintenance_at %>
+
+        <%= form.datetime_field :maintenance_at %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :last_synced_at %>
+
+        <%= form.datetime_local_field :last_synced_at %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :billing_month %>
+
+        <%= form.month_field :billing_month %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :launch_week %>
+
+        <%= form.week_field :launch_week %>
+      </div>
+
+      <%= form.input :contract_started_on %>
+      <%= form.input :onboarded_at %>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Billing</h2>
+
+      <%= form.input :billing_email %>
+      <%= form.input :company_name %>
+      <%= form.input :vat_id %>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :billing_phone %>
+
+        <%= form.telephone_field :billing_phone %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :billing_address %>
+
+        <%= form.text_area :billing_address, rows: 3 %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :payment_method %>
+
+        <%= form.select :payment_method,
+          options_for_select([["Card", "card"], ["Invoice", "invoice"]], @workspace.payment_method),
+          {},
+          class: "w-full rounded-sm border border-gray-200 px-2.5 py-1.5 text-sm" %>
+      </div>
+
+      <div class="mt-4">
+        <%= form.collection_radio_buttons :invoice_delivery,
+          [["Email", "email"], ["Post", "post"]],
+          :last, :first %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :tax_document %>
+
+        <%= form.file_field :tax_document, additional_class: "bg-gray-50" %>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Labels, text areas, and custom CSS</h2>
+
+      <div data-slot="field" class="w-full">
+        <%= form.label :display_name, "Custom label text" %>
+
+        <%= form.text_field :display_name,
+          class: "w-full rounded-sm border border-gray-200 px-2.5 py-1.5 text-sm" %>
+      </div>
+
+      <div data-slot="field" class="mt-4 w-full">
+        <%= form.label :internal_notes %>
+
+        <%= form.textarea :internal_notes, rows: 3 %>
+      </div>
+
+      <%= form.input :onboarding_notes, as: :text, hint: "Visible to workspace admins only." %>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-base font-semibold text-gray-900">Rich text</h2>
+      <p class="text-sm text-gray-500">
+        Add ActionText and a <code>has_rich_text</code> attribute to use
+        <code>form.rich_text_area</code>.
+      </p>
+    </section>
+
+    <div class="flex items-center gap-3">
+      <%= form.submit "Save workspace",
+        class: "rounded-sm bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800" %>
+      <%= form.button "Cancel", type: :button,
+        class: "rounded-sm px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100" %>
+    </div>
+  <% end %>
+</div>

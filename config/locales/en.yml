@@ -29,3 +29,10 @@
 
 en:
   hello: "Hello world"
+  labels:
+    slug: "Workspace URL"
+    smtp_password: "SMTP password"
+    billing_email: "Billing email"
+  hints:
+    slug: "Lowercase letters, numbers, and hyphens only."
+    smtp_password: "Stored encrypted. Leave blank to keep the current password."
